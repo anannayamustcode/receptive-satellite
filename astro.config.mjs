@@ -4,9 +4,10 @@ import node from '@astrojs/node';
 export default defineConfig({
   output: 'server',
   adapter: node({
-    mode: 'standalone',
+  mode: 'standalone',
   }),
   server: {
+    host: '0.0.0.0', // 👈 THIS is crucial for Railway
     port: process.env.PORT || 3000,
   },
 });
