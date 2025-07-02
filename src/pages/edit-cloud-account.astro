@@ -1,0 +1,80 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { openDB } from "../lib/db";
+
+const url = new URL(Astro.request.url);
+const id = url.searchParams.get("id");
+
+const db = await openDB();
+const account = await db.get("SELECT * FROM cloud_accounts WHERE id = ?", id);
+const users = await db.all("SELECT id, name FROM users");
+await db.close();
+---
+
+<BaseLayout title="Edit Cloud Account">
+  <h1 class="text-2xl font-bold mb-6">Edit Cloud Account</h1>
+
+  {
+    account ? (
+      <form
+        method="POST"
+        action="/api/edit-cloud-account"
+        class="space-y-4 max-w-md"
+      >
+        <input type="hidden" name="id" value={account.id} />
+        <div>
+          <label for="provider" class="block font-medium">
+            Provider
+          </label>
+          <input
+            type="text"
+            name="provider"
+            id="provider"
+            value={account.provider}
+            required
+            class="w-full border px-3 py-2 rounded"
+          />
+        </div>
+        <div>
+          <label for="account_name" class="block font-medium">
+            Account Name
+          </label>
+          <input
+            type="text"
+            name="account_name"
+            id="account_name"
+            value={account.account_name}
+            required
+            class="w-full border px-3 py-2 rounded"
+          />
+        </div>
+        <div>
+          <label for="user_id" class="block font-medium">
+            User
+          </label>
+          <select
+            name="user_id"
+            id="user_id"
+            required
+            class="w-full border px-3 py-2 rounded"
+          >
+            {users.map((user) => (
+              <option value={user.id} selected={user.id === account.user_id}>
+                {user.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <button
+          type="submit"
+          class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          Update Account
+        </button>
+      </form>
+    ) : (
+      <p>Account not found.</p>
+    )
+  }
+</BaseLayout>

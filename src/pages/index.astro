@@ -1,11 +1,124 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// src/pages/index.astro
+import EventsPieChart from "../components/EventsPieChart";
+import SeverityPieChart from "../components/SeverityPieChart.tsx";
+import EventsBarChart from "../components/EventsBarChart.tsx";
+import EventsLineChart from "../components/EventsLineChart.tsx";
+import RecentEventsTable from "../components/RecentEventsTable.tsx";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import DashboardMetrics from "../components/DashboardMetrics.tsx";
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<html>
+  <head>
+    <title>Security Dashboard</title>
+  </head>
+  <BaseLayout title="Security Dashboard">
+    <link rel="stylesheet" href="/styles/global.css" />
+    <script src="/scripts/main.js" defer></script>
+    <body
+      class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100"
+    >
+      <!-- Header Section -->
+      <div
+        class="bg-white/70 backdrop-blur-sm border-b border-white/20 sticky top-0 z-10"
+      >
+        <div class="max-w-7xl mx-auto px-6 py-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <h1
+                class="text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent"
+              >
+                Cloud Security Events
+              </h1>
+              <p class="text-slate-600 mt-2 text-lg">
+                Real-time monitoring and analysis of your cloud infrastructure
+              </p>
+            </div>
+            <div class="flex items-center space-x-2">
+              <div class="h-3 w-3 bg-green-400 rounded-full animate-pulse">
+              </div>
+              <span class="text-sm text-slate-600 font-medium"
+                >Live Dashboard</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="max-w-7xl mx-auto px-6 py-8 space-y-8">
+        <!-- Metrics Section -->
+        <div class="space-y-4">
+          <h2 class="text-xl font-semibold text-slate-800">Overview Metrics</h2>
+          <DashboardMetrics client:load />
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <!-- Event Types Chart -->
+          <div class="space-y-4">
+            <EventsPieChart client:load />
+          </div>
+
+          <!-- Severity Chart -->
+          <div class="space-y-4">
+            <SeverityPieChart client:load />
+          </div>
+        </div>
+
+        <!-- Provider and Timeline Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div class="space-y-4">
+            <EventsBarChart client:load />
+          </div>
+
+          <div class="space-y-4">
+            <EventsLineChart client:load />
+          </div>
+        </div>
+
+        <!-- Recent Events Table -->
+        <div class="space-y-4">
+          <h2 class="text-xl font-semibold text-slate-800">Activity Feed</h2>
+          <RecentEventsTable client:load />
+        </div>
+      </div>
+    </body>
+  </BaseLayout>
+</html>
+<!-- ---
+// src/pages/index.astro
+import EventsPieChart from "../components/EventsPieChart";
+import SeverityPieChart from "../components/SeverityPieChart.tsx";
+import EventsBarChart from "../components/EventsBarChart.tsx";
+import EventsLineChart from "../components/EventsLineChart.tsx";
+import RecentEventsTable from "../components/RecentEventsTable.tsx";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import DashboardMetrics from "../components/DashboardMetrics.tsx";
+---
+
+<html>
+  <head>
+    <title>Security Dashboard</title>
+  </head>
+  <BaseLayout title="Security Dashboard">
+    <link rel="stylesheet" href="/styles/global.css" />
+    <script src="/scripts/main.js" defer></script>
+    <body class="p-8 bg-gray-50 font-sans">
+      <h1 class="text-2xl font-bold">Cloud Security Events</h1>
+      <div class="mt-4 mb-8">
+        <p class="text-gray-700">
+          Welcome to your security dashboard. Here you can view and analyze
+          cloud security events.
+        </p>
+      </div>
+      <DashboardMetrics client:load />
+      <EventsPieChart client:load />
+      <SeverityPieChart client:load />
+      <EventsBarChart client:load />
+      <EventsLineChart client:load />
+      <RecentEventsTable client:load />
+    </body>
+  </BaseLayout>
+</html> -->

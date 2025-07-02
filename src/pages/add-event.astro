@@ -1,0 +1,52 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { openDB } from "../lib/db";
+
+// Fetch cloud accounts for the select input
+const db = await openDB();
+const accounts = await db.all(`SELECT id, account_name FROM cloud_accounts`);
+await db.close();
+---
+
+<BaseLayout title="Add Event">
+  <h1 class="text-2xl font-semibold mb-4">Add a New Security Event</h1>
+  <form action="/api/add-event" method="POST" class="space-y-4 max-w-md">
+    <select name="event_type" required class="w-full p-2 border rounded">
+      <option value="">Select Event Type</option>
+      <option value="Unauthorized Access">Unauthorized Access</option>
+      <option value="Data Breach">Data Breach</option>
+      <option value="Malware">Malware</option>
+      <option value="Phishing Attempt">Phishing Attempt</option>
+    </select>
+
+    <select name="severity" required class="w-full p-2 border rounded">
+      <option value="">Select Severity</option>
+      <option value="low">Low</option>
+      <option value="medium">Medium</option>
+      <option value="high">High</option>
+    </select>
+
+    <input
+      type="datetime-local"
+      name="timestamp"
+      required
+      class="w-full p-2 border rounded"
+    />
+
+    <select name="cloud_account_id" required class="w-full p-2 border rounded">
+      <option value="">Select Cloud Account</option>
+      {
+        accounts.map((acc) => (
+          <option value={acc.id}>{acc.account_name}</option>
+        ))
+      }
+    </select>
+
+    <button
+      type="submit"
+      class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+    >
+      Add Event
+    </button>
+  </form>
+</BaseLayout>

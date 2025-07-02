@@ -1,0 +1,58 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { openDB } from "../lib/db";
+
+const db = await openDB();
+const users = await db.all("SELECT id, name FROM users");
+await db.close();
+---
+
+<BaseLayout title="Add Cloud Account">
+  <h1 class="text-2xl font-bold mb-6">Add Cloud Account</h1>
+
+  <form
+    method="POST"
+    action="/api/add-cloud-account"
+    class="space-y-4 max-w-md"
+  >
+    <div>
+      <label for="provider" class="block font-medium">Provider</label>
+      <input
+        type="text"
+        name="provider"
+        id="provider"
+        required
+        class="w-full border px-3 py-2 rounded"
+      />
+    </div>
+    <div>
+      <label for="account_name" class="block font-medium">Account Name</label>
+      <input
+        type="text"
+        name="account_name"
+        id="account_name"
+        required
+        class="w-full border px-3 py-2 rounded"
+      />
+    </div>
+    <div>
+      <label for="user_id" class="block font-medium">User</label>
+      <select
+        name="user_id"
+        id="user_id"
+        required
+        class="w-full border px-3 py-2 rounded"
+      >
+        <option value="">Select a user</option>
+        {users.map((user) => <option value={user.id}>{user.name}</option>)}
+      </select>
+    </div>
+
+    <button
+      type="submit"
+      class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+    >
+      Add Cloud Account
+    </button>
+  </form>
+</BaseLayout>
