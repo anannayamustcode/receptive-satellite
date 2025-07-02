@@ -7,7 +7,7 @@ export default defineConfig({
   adapter: node({
     mode: 'standalone',
   }),
-  integrations: [react()],
+  integrations: [react(),tailwind()],
   server: {
     host: '0.0.0.0',
     port: process.env.PORT || 3000,
